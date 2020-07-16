@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
 import './App.css';
-
 
 function Header() {
   return (
@@ -11,14 +9,13 @@ function Header() {
         <h1 className="display-4">Employee Directory</h1>
       </div>
     </div>
-
   )
 }
 
 function ListEmployees({ name }) {
   const [data, setData] = useState(null);
   useEffect(() => {
-    fetch(`https://randomuser.me/api/?results=1&nat=u`)
+    fetch(`https://randomuser.me/api/?results=200&nat=u`)
       .then(res => res.json())
       .then(setData)
       .catch(console.error)
@@ -36,15 +33,20 @@ function ListEmployees({ name }) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><img src={data.results[0].picture.thumbnail} alt = {data.results[0].picture} /></td>
-            <td>{data.results[0].name.first} {data.results[0].name.last}</td>
-            <td>{data.results[0].phone}</td>
-            <td>{data.results[0].email}</td>
-            <td>{data.results[0].dob.date.substring(0,10)}</td>
+        {data.results.map(item => (
+          <tr key = {item.login.uuid}>
+              <>
+              <td ><img src={item.picture.thumbnail} alt={item.picture.thumbnail} /></td>
+              <td>{item.name.first} {item.name.last}</td>
+              <td>{item.phone}</td>
+              <td>{item.email}</td>
+              <td>{item.dob.date.substring(0, 10)}</td>
+              </>
           </tr>
+           ))}
         </tbody>
-      </table>)
+      </table>
+    )
   }
   return null;
 }
@@ -54,7 +56,6 @@ function App() {
     <>
       <Header />
       <ListEmployees />
-
     </>
   );
 }
