@@ -33,7 +33,7 @@ function ListEmployees({ name }) {
           </tr>
         </thead>
         <tbody>
-        {data.results.map(item => (
+        {data.results.filter(item => item.location.country === "United States").map(item => (
           <tr key = {item.login.uuid}>
               <>
               <td ><img src={item.picture.thumbnail} alt={item.picture.thumbnail} /></td>
