@@ -1,16 +1,37 @@
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function ListEmployees() {
-    const [data, setData] = useState(null);
-    useEffect(() => {
-      fetch(`https://randomuser.me/api/?results=400&nat=u`)
-        .then(res => res.json())
-        .then(setData)
-        .catch(console.error)
-    }, []);
-    if (data) {
-      return (
+  const [employees, setEmployees] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+
+  
+  useEffect(() => {
+    axios
+    .get("https://randomuser.me/api/?results=400&nat=u")
+      .then(res => setEmployees(res.data.results))
+      .catch(console.error)
+  }, []);
+
+  useEffect(() => {
+    setFilteredEmployees(
+      employees.filter(employee => {
+        return employee.name.first.toLowerCase().includes(search.toLowerCase())
+      })
+    )
+  },[search, employees])
+  const handleInputChange = event => {
+    setSearch(event.target.value);
+  };
+ 
+    return (
+      <>
+        <div className="input-group d-inline-flex p-2 bd-highlight w-25">
+
+          <input onChange = {handleInputChange}type="text" className="form-control" placeholder="Search By Name" aria-label="Username" aria-describedby="addon-wrapping" />
+        </div>
         <table className="table table-striped">
           <thead className="thead-dark">
             <tr>
@@ -22,21 +43,22 @@ function ListEmployees() {
             </tr>
           </thead>
           <tbody>
-          {data.results.filter(item => item.location.country === "United States").map(item => (
-            <tr key = {item.login.uuid}>
+            {filteredEmployees.filter(item => item.location.country === "United States").map(item => (
+              <tr key={item.login.uuid}>
                 <>
-                <td ><img src={item.picture.thumbnail} alt={item.picture.thumbnail} /></td>
-                <td>{item.name.first} {item.name.last}</td>
-                <td>{item.phone}</td>
-                <td>{item.email}</td>
-                <td>{item.dob.date.substring(0, 10)}</td>
+                  <td ><img src={item.picture.thumbnail} alt={item.picture.thumbnail} /></td>
+                  <td>{item.name.first} {item.name.last}</td>
+                  <td>{item.phone}</td>
+                  <td>{item.email}</td>
+                  <td>{item.dob.date.substring(0, 10)}</td>
                 </>
-            </tr>
-             ))}
+              </tr>
+            ))}
           </tbody>
         </table>
-      )
-    }
-    return null;
-  }
-  export default ListEmployees;
+      </>
+    )
+  
+
+}
+export default ListEmployees;
