@@ -27,9 +27,8 @@ function ListEmployees() {
   };
  
     return (
-      <>
+      <div className = "container">
         <div className="input-group d-inline-flex p-2 bd-highlight w-25">
-
           <input onChange = {handleInputChange}type="text" className="form-control" placeholder="Search By Name" aria-label="Username" aria-describedby="addon-wrapping" />
         </div>
         <table className="table table-striped">
@@ -56,7 +55,7 @@ function ListEmployees() {
             ))}
           </tbody>
         </table>
-      </>
+      </div>
     )
   
 
